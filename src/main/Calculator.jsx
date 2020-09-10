@@ -17,8 +17,23 @@ export default class Calculator extends Component {
 
     state = { ...initialState }
 
+    constructor(props) {
+        super(props)
+        this.clearMemory = this.clearMemory.bind(this)
+    }
+
     clearMemory() {
         this.setState({ ...initialState })
+        console.log('clear memory')
+    }
+
+    render() {
+        return (
+        <div className="Calculator">
+            <Display value={this.state.displayValue} />
+            <Button label="AC" click={this.clearMemory} triple />
+        </div>
+        )
     }
 
 }

@@ -73,7 +73,14 @@ export default class Calculator extends Component {
     }
 
     addDigit(digit) {
+        if (digit === '.' && this.displayValue.includes('.')) return
+        if (this.displayValue.length > 9 && !this.clearDisplay) return
+        if (this.displayValue === '0') this.displayValue = ''
 
+        this.clearDisplay ? this.displayValue = digit : this.displayValue += digit
+        this.clearDisplay = false
+
+        this.values[this.current] = this.displayValue.includes('.') ? Math.parseFloat(this.displayValue) : this.parseInt(this.displayValue)
     }
 
     //lembre-se de terminar o calendário: os dias ainda não estão alinhados com os dias da semana

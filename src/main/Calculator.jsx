@@ -29,14 +29,46 @@ export default class Calculator extends Component {
     }
 
     setOperation(operation) {
-        const equals = operation === '='
-
         if (this.current === 0) {
-            if (equals) return
-            this.values[0] = Math.parseFloat(this.displayValue)
-            this.operation = operation
             this.clearDisplay = true
             this.current = 1
+        } else {
+            let result = 0
+            switch (this.operation) {
+                case '+':
+                    result = this.values[0] + this.values[1]
+                    break
+                case '-':
+                    result = this.values[0] - this.values[1]
+                    break
+                case '*':
+                    result = this.values[0] * this.values[1]
+                    break
+                case '/':
+                    if (this.values[1] === 0) {
+                        this.displayValue = 'Are you fu****g crazy?'
+                        this.clearDisplay = true
+                        this.values = [0, 0]
+                        this.current  = 0
+                    } else {
+                        result = this.values[0] / this.values[1]
+                    }
+                    break
+                default:
+                    break
+            }
+
+            this.values = [result, 0]
+            this.current = 1
+            this.clearDisplay = true
+            this.displayValue = `${result}`
+        }
+
+        if (operation === '=') {
+            this.current = 0
+            this.clearDisplay = false
+        } else {
+            this.operation = operation
         }
     }
 

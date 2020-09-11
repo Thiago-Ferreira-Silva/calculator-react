@@ -29,58 +29,70 @@ export default class Calculator extends Component {
     }
 
     setOperation(operation) {
-        if (this.current === 0) {
-            this.clearDisplay = true
-            this.current = 1
+        const state = { ...this.state }
+        if (state.current === 0) {
+            state.clearDisplay = true
+            state.current = 1
         } else {
             let result = 0
-            switch (this.operation) {
+            switch (state.operation) {
                 case '+':
-                    result = this.values[0] + this.values[1]
+                    result = state.values[0] + state.values[1]
                     break
                 case '-':
-                    result = this.values[0] - this.values[1]
+                    result = state.values[0] - state.values[1]
                     break
                 case '*':
-                    result = this.values[0] * this.values[1]
+                    result = state.values[0] * state.values[1]
                     break
                 case '/':
-                    if (this.values[1] === 0) {
-                        this.displayValue = 'Are you fu****g crazy?'
-                        this.clearDisplay = true
-                        this.values = [0, 0]
-                        this.current  = 0
+                    if (state.values[1] === 0) {
+                        state.displayValue = 'Are you fu****g crazy?'
+                        state.clearDisplay = true
+                        state.values = [0, 0]
+                        state.current  = 0
                     } else {
-                        result = this.values[0] / this.values[1]
+                        result = state.values[0] / state.values[1]
                     }
                     break
                 default:
                     break
             }
 
-            this.values = [result, 0]
-            this.current = 1
-            this.clearDisplay = true
-            this.displayValue = `${result}`
+            state.values = [result, 0]
+            state.current = 1
+            state.clearDisplay = true
+            state.displayValue = `${result}`
         }
 
         if (operation === '=') {
-            this.current = 0
-            this.clearDisplay = false
+            state.current = 0
+            state.clearDisplay = false
+            
         } else {
-            this.operation = operation
+            state.operation = operation
         }
+
+        this.setState({ ...state })
     }
 
     addDigit(digit) {
-        if (digit === '.' && this.displayValue.includes('.')) return
-        if (this.displayValue.length > 9 && !this.clearDisplay) return
-        if (this.displayValue === '0') this.displayValue = ''
+        let displayValue = this.state.displayValue
+        const values = this.state.values
 
-        this.clearDisplay ? this.displayValue = digit : this.displayValue += digit
-        this.clearDisplay = false
+        if (digit === '.' && displayValue.includes('.')) return
+        if (displayValue.length > 9 && !this.state.clearDisplay) return
+        if (displayValue === '0') displayValue = ''
 
-        this.values[this.current] = this.displayValue.includes('.') ? Math.parseFloat(this.displayValue) : this.parseInt(this.displayValue)
+        this.state.clearDisplay ? displayValue = digit : displayValue += digit
+
+        values[this.state.current] = displayValue.includes('.') ? parseFloat(displayValue) : parseInt(displayValue)
+
+        this.setState({
+            displayValue,
+            values,
+            clearDisplay: false
+        })
     }
 
     //lembre-se de terminar o calendário: os dias ainda não estão alinhados com os dias da semana

@@ -29,7 +29,15 @@ export default class Calculator extends Component {
     }
 
     setOperation(operation) {
+        const equals = operation === '='
 
+        if (this.current === 0) {
+            if (equals) return
+            this.values[0] = Math.parseFloat(this.displayValue)
+            this.operation = operation
+            this.clearDisplay = true
+            this.current = 1
+        }
     }
 
     addDigit(digit) {

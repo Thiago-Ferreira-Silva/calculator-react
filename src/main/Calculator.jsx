@@ -95,8 +95,6 @@ export default class Calculator extends Component {
         })
     }
 
-    //lembre-se de terminar o calendário: os dias ainda não estão alinhados com os dias da semana
-
     render() {
         return (
             <div className="calculator">
